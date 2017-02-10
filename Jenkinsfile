@@ -31,6 +31,9 @@ node {
              // deploy image
              sh "${ocCmd} new-app springboot-app-template:latest -e APP_PARAM_1=TEST_PARAM -n springboot-dev"
              sh "${ocCmd} expose svc/springboot-app-template -n springboot-dev"
+
+             emailext attachLog: true, body: 'Jenkins build has finished.', compressLog: true, subject: 'Jenkins: springboot-app-pipeline', to: 'taksato@redhat.com'
+
 }
 
 def version() {
