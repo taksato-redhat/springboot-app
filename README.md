@@ -1,1 +1,1 @@
-# springboot-app-template
+# springboot-app
