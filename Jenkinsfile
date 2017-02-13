@@ -7,7 +7,7 @@ node {
              sh "${ocCmd} login -u springboot -p springboot --server=https://master1-02d0.oslab.opentlc.com --insecure-skip-tls-verify=true"
             
              stage 'Build'
-             git branch: 'master', url: 'https://github.com/taksato-redhat/springboot-app-template.git'
+             git branch: 'master', url: 'https://github.com/taksato-redhat/springboot-app.git'
              def v = version()
              sh "${mvnCmd} clean install -DskipTests=true"
              
@@ -23,14 +23,14 @@ node {
              )
              
              stage 'Deploy DEV'
-             sh "${ocCmd} delete bc,dc,svc,route -l app=springboot-app-template -n springboot-dev"
+             sh "${ocCmd} delete bc,dc,svc,route -l app=springboot-app -n springboot-dev"
              // create build. override the exit code since it complains about exising imagestream
-             sh "${ocCmd} new-build --name=springboot-app-template --image-stream=springboot-rhel7 --binary=true --labels=app=springboot-app-template -n springboot-dev || true"
+             sh "${ocCmd} new-build --name=springboot-app --image-stream=springboot-rhel7 --binary=true --labels=app=springboot-app -n springboot-dev || true"
              // build image
-             sh "${ocCmd} start-build springboot-app-template --from-file=target/app.jar --wait=true -n springboot-dev"
+             sh "${ocCmd} start-build springboot-app --from-file=target/app.jar --wait=true -n springboot-dev"
              // deploy image
-             sh "${ocCmd} new-app springboot-app-template:latest -e APP_PARAM_1=TEST_PARAM -n springboot-dev"
-             sh "${ocCmd} expose svc/springboot-app-template -n springboot-dev"
+             sh "${ocCmd} new-app springboot-app:latest -e APP_PARAM_1=TEST_PARAM -n springboot-dev"
+             sh "${ocCmd} expose svc/springboot-app -n springboot-dev"
 
              emailext attachLog: true, body: 'Jenkins build has finished.', compressLog: true, subject: 'Jenkins: springboot-app-pipeline', to: 'taksato@redhat.com'
 
