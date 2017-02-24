@@ -4,7 +4,7 @@ node {
              def mvnHome = tool 'M3'
              def mvnCmd = "${mvnHome}/bin/mvn"
 
-             sh "${ocCmd} login -u springboot -p springboot --server=https://master1-02d0.oslab.opentlc.com --insecure-skip-tls-verify=true"
+             sh "${ocCmd} login -u springboot -p springboot --server=https://master1-c8f8.oslab.opentlc.com --insecure-skip-tls-verify=true"
             
              stage 'Build'
              git branch: 'master', url: 'https://github.com/taksato-redhat/springboot-app.git'
